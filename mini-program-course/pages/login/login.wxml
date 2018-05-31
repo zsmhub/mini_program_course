@@ -1,0 +1,51 @@
+<view class="container">
+  <view class="page-body">
+    <form bindsubmit="login" bindreset="reset">
+      <view class="sm_weui_cells">
+        <view class="weui-cells__title sm_weui_cell_title">
+          <text class="sm_weui_cells_title_text">系统登录</text>
+        </view>
+        <view class="weui-cells weui-cells_after-title">
+          <view class="weui-cell weui-cell_input">
+            <view class="weui-cell__hd">
+              <view class="weui-label">账号:</view>
+            </view>
+            <view class="weui-cell__bd">
+              <input class="weui-input" name="username" placeholder="请输入账号" value="{{username}}" />
+            </view>
+          </view>
+        </view>
+        <view class="weui-cells weui-cells_after-title">
+          <view class="weui-cell weui-cell_input">
+            <view class="weui-cell__hd">
+              <view class="weui-label">密码:</view>
+            </view>
+            <view class="weui-cell__bd">
+              <input class="weui-input" type="password" name="password" placeholder="请输入密码" value="{{password}}" />
+            </view>
+          </view>
+        </view>
+        <view class="weui-cells weui-cells_after-title">
+          <view class="weui-cell weui-cell_input">
+            <view class="weui-cell__hd">
+              <view class="weui-label">类型:</view>
+            </view>
+            <view class="weui-cell__bd">
+               <picker class="weui_picker" name="type_user" bindchange="bindType" value="{{type_index}}" range="{{type_user}}">
+                  <view class="picker">
+                    {{type_user[type_index]}}
+                  </view>
+                </picker> 
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="btn-area">
+        <button type="primary" formType="submit">登 录</button>
+        <button type="default" formType="reset">重 置</button>
+      </view>
+    </form>
+  </view>
+
+  <include src="../foot/foot.wxml" />
+</view>

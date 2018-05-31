@@ -1,0 +1,8 @@
+<view class="page-foot">
+  <!-- <view class="page-foot-contact">
+    <navigator url="../contact/contact" open-type="navigate" hover-class="navigator-hover">
+      <image class="icon-foot" src="../../style/image/contact.png"></image>
+    </navigator>
+  </view> -->
+  <view>Copyright © 广州城市职业学院</view>
+</view>

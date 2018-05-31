@@ -1,0 +1,196 @@
+#定义变量
+variables:
+  DOCKER_DRIVER: overlay
+  #部署IP配置
+  STAGING_HOST: ${DEV_DEPLOY_HOST}
+  # PRODUCTION_HOST: ${PROD_DEPLOY_HOST}
+  # FG_DOCKER_REGISTRY: website:4567
+  # docker镜像
+  WEB_IMAGE: website:4567/weixin/mini_program_course
+
+#运行前执行脚本
+before_script:
+  #获取当前发布版本号
+  - VERSION_BUILD_NUMBER=$(ls -l ${CI_PROJECT_DIR}/build/versions/|awk '{print $9}'|sort -t'.' -k 1,1n -k 2,2n -k 3,3n|tail -n1|awk -F.txt '{print $1}')
+  #获取版本描述信息
+  - VERSION_BUILD_NOTES="$(cat ${CI_PROJECT_DIR}/build/versions/${VERSION_BUILD_NUMBER}.txt)"
+  #是否需要更新数据库
+  - VERSION_BUILD_SQL="${CI_PROJECT_DIR}/build/sql/${VERSION_BUILD_NUMBER}.sql"
+  #定义项目标识
+  - CONTAINER_NAME_PREFIX=$(echo ${CI_PROJECT_PATH}|sed -e 's#\/#.#g')
+  #定义所在宿主机部署目录
+  - DEPLOY_PROJECT_PATH=/data/project/${CONTAINER_NAME_PREFIX}/
+
+#运行后执行脚本
+# after_script: #
+  # - echo 'after_script'
+
+#定义job执行步骤
+stages:
+ - check
+ - test
+ - build
+ - deploy
+
+#代码语法检查 #不能忽略master分支，因为要考虑feature分支直接合并到master的情况-zsm
+Syntax Check:
+  stage: check
+  image: php:7.1
+  except:
+    - tags
+  script:
+    - for file in `find ${CI_PROJECT_DIR}/src/application -name "*.php"`; do php -l $file; done #shell
+
+#单元测试
+Unit Test:
+  stage: test
+  image: php:7.1
+  services:
+    - mysql:5.7
+  only:
+    # - master
+    - develop
+    - /^feature-.*$/
+  variables:
+    DOCKER_DRIVER: overlay
+    MYSQL_DATABASE: course
+    MYSQL_ROOT_PASSWORD: coursepassword
+  # coverage: '/^\s*Lines:\s*\d+.\d+\%/'
+  script:
+    #替换版本号
+    # - sed -i "s#@WEB_VERSION@#${VERSION_BUILD_NUMBER}#g"
+    #   ${CI_PROJECT_DIR}/src/application/config/config.php
+    #替换数据库配置
+    - sed -e "s#@mysql.default.hostname@#mysql#g"
+      -e "s#@mysql.default.database@#${MYSQL_DATABASE}#g"
+      -e "s#@mysql.default.username@#root#g"
+      -e "s#@mysql.default.password@#${MYSQL_ROOT_PASSWORD}#g"
+      ${CI_PROJECT_DIR}/src/application/config/database.php -i
+    #安装mysql客户端
+    - command -v mysql >/dev/null 2>&1 ||  ( /bin/cp ${CI_PROJECT_DIR}/build/tools/sources.list.jessie-aliyun /etc/apt/sources.list && apt-get -o Acquire::Check-Valid-Until=false update && apt-get install -y mysql-client libmcrypt-dev)
+    #导入数据库信息
+    - '[[ -f "${CI_PROJECT_DIR}/build/sql/latest.sql" ]] && mysql -hmysql -uroot -p${MYSQL_ROOT_PASSWORD} -D${MYSQL_DATABASE} < ${CI_PROJECT_DIR}/build/sql/latest.sql'
+    #安装php mysqli扩展
+    - docker-php-ext-install mysqli mcrypt
+    #安装xdebug扩展
+    - cd ${CI_PROJECT_DIR}/build/tools/ ;
+      tar xvf xdebug-2.5.0.tgz && cd xdebug-2.5.0 ;
+      phpize && ./configure --with-php-config=/usr/local/bin/php-config ;
+      make && make install ;
+      echo 'zend_extension=xdebug.so' | tee /usr/local/etc/php/conf.d/xdebug.ini
+    #执行phpunit单元测试
+    - '${CI_PROJECT_DIR}/build/tools/phpunit --debug --configuration ${CI_PROJECT_DIR}/tests/phpunit.xml'
+
+Feature Review:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  only:
+    - /^feature-.*$/
+  script:
+    - VERSION_BUILD_NUMBER=${CI_COMMIT_REF_NAME}
+    # - sed -i "s#@WEB_VERSION@#${VERSION_BUILD_NUMBER}#g" ${CI_PROJECT_DIR}/src/application/config/config.php
+    - find ./src/ -name ".*" -exec rm -rf "{}" \;
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker build --pull -f $CI_PROJECT_DIR/build/docker/Dockerfile -t $CI_REGISTRY_IMAGE:$VERSION_BUILD_NUMBER ./
+    - docker save -o ${CI_PROJECT_DIR}/build/docker/image_${VERSION_BUILD_NUMBER}.tar $CI_REGISTRY_IMAGE:$VERSION_BUILD_NUMBER
+    #项目容器所在宿主机目录
+    - DEPLOY_DIR="${DEPLOY_PROJECT_PATH}staging__master"
+    #替换数据库配置
+    - sed -e "s#MYSQL_HOST=#MYSQL_HOST=${DEV_MYSQL_HOST}#g"
+      -e "s#MYSQL_DATABASE=#MYSQL_DATABASE=${DEV_MYSQL_DATABASE}#g"
+      -e "s#MYSQL_USER=#MYSQL_USER=${DEV_MYSQL_USER}#g"
+      -e "s#MYSQL_PASSWORD=#MYSQL_PASSWORD=${DEV_MYSQL_PASSWORD}#g"
+      ${CI_PROJECT_DIR}/build/deploy/config.env -i  # config.env 的作用:在install.sh中用到 -zsm
+
+    - 'which ssh-agent || ( sed -i "s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g" /etc/apk/repositories && apk update && apk add openssh )'
+    - eval $(ssh-agent -s)
+    - echo "${SSH_PRIVATE_KEY}" | ssh-add -
+    - mkdir -p ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+    - ssh root@${STAGING_HOST} <<EOF
+    - '[ ! -d ${DEPLOY_DIR}/dbexec/ ] && mkdir -p ${DEPLOY_DIR}/dbexec/ '
+    - EOF
+
+    - scp -C -o "ForwardAgent=yes" ${CI_PROJECT_DIR}/build/deploy/* root@${STAGING_HOST}:${DEPLOY_DIR}/
+    - scp -C -o "ForwardAgent=yes" ${CI_PROJECT_DIR}/build/docker/image_${VERSION_BUILD_NUMBER}.tar root@${STAGING_HOST}:${DEPLOY_DIR}/
+    #判断是否需要同步sql文件
+    - '[[ -f "${CI_PROJECT_DIR}/build/sql/${VERSION_BUILD_NUMBER}.sql" ]] && scp -C -o "ForwardAgent=yes" "${CI_PROJECT_DIR}/build/sql/${VERSION_BUILD_NUMBER}.sql" ${STAGING_HOST}:${DEPLOY_DIR}/dbexec/${VERSION_BUILD_NUMBER}.sql'
+
+    - ssh root@${STAGING_HOST} <<EOF
+    - echo "如 build/sql/${VERSION_BUILD_NUMBER}.sql 文件存在将会被执行，请知悉"
+    - rm -f $DEPLOY_DIR/nginx.conf
+    - bash $DEPLOY_DIR/install.sh install ${VERSION_BUILD_NUMBER}
+    - echo "访问地址 http://${STAGING_HOST}:[容器端口号]/index.php?d=admin&c=user&a=index "
+    - EOF
+
+#打包上传镜像
+Build Image:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  only:
+    - master
+  script:
+    # - sed -i "s#@WEB_VERSION@#${VERSION_BUILD_NUMBER}#g" ${CI_PROJECT_DIR}/src/application/config/config.php
+    - find ./src/ -name ".*" -exec rm -rf "{}" \;
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker build --pull -f $CI_PROJECT_DIR/build/docker/Dockerfile -t $CI_REGISTRY_IMAGE:$VERSION_BUILD_NUMBER ./
+    - docker push $CI_REGISTRY_IMAGE:$VERSION_BUILD_NUMBER
+    - docker tag $CI_REGISTRY_IMAGE:$VERSION_BUILD_NUMBER $CI_REGISTRY_IMAGE:latest
+    - docker push $CI_REGISTRY_IMAGE:latest
+    - 'which curl || ( sed -i "s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g" /etc/apk/repositories && apk update && apk add curl )'
+    - curl --request POST --header "PRIVATE-TOKEN:${API_PRIVATE_TOKEN}"
+      --form "id=${CI_PROJECT_ID}" --form "tag_name=tag-${VERSION_BUILD_NUMBER}" --form "ref=master" --form "message=${VERSION_BUILD_NOTES}" --form "release_description=${VERSION_BUILD_NOTES}"
+      "https://website/api/v4/projects/${CI_PROJECT_ID}/repository/tags"
+
+#服务器部署
+Staging Deploy:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind # docker in docker
+  only:
+    - master
+  environment:
+    name: staging/$CI_PROJECT_NAME
+    url: "http://${DEV_WEB_DOMAIN}/index.php?d=admin&c=home&a=index"
+  script:
+    #项目容器所在宿主机目录
+    - DEPLOY_DIR="${DEPLOY_PROJECT_PATH}staging__${CI_COMMIT_REF_NAME}"
+    #替换数据库配置
+    - sed -e "s#MYSQL_HOST=#MYSQL_HOST=${DEV_MYSQL_HOST}#g"
+      -e "s#MYSQL_DATABASE=#MYSQL_DATABASE=${DEV_MYSQL_DATABASE}#g"
+      -e "s#MYSQL_USER=#MYSQL_USER=${DEV_MYSQL_USER}#g"
+      -e "s#MYSQL_PASSWORD=#MYSQL_PASSWORD=${DEV_MYSQL_PASSWORD}#g"
+      -e "s#WEB_BASEURL=#WEB_BASEURL=http://${DEV_WEB_DOMAIN}#g"
+      ${CI_PROJECT_DIR}/build/deploy/config.env -i
+    - sed -e "s#@DOMAIN@#${DEV_WEB_DOMAIN}#g" ${CI_PROJECT_DIR}/build/deploy/nginx.conf -i
+    - sed -e "s#WEB_IMAGE=#WEB_IMAGE=${WEB_IMAGE}#g" ${CI_PROJECT_DIR}/build/deploy/install.sh -i
+
+    - 'which ssh-agent || ( sed -i "s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g" /etc/apk/repositories && apk update && apk add openssh )'
+    - eval $(ssh-agent -s)
+    - echo "${SSH_PRIVATE_KEY}" | ssh-add -
+    - mkdir -p ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+    #以下EOF间的命令是在远程主机下执行
+    - ssh root@${STAGING_HOST} <<EOF
+    - '[ ! -d ${DEPLOY_DIR}/dbexec/ ] && mkdir -p ${DEPLOY_DIR}/dbexec/ '
+    - EOF
+
+    # scp命令用于Linux之间复制文件和目录
+    - scp -C -o "ForwardAgent=yes" ${CI_PROJECT_DIR}/build/deploy/* root@${STAGING_HOST}:${DEPLOY_DIR}/
+    #判断是否需要同步sql文件
+    - '[[ -f $VERSION_BUILD_SQL ]] && scp -C -o "ForwardAgent=yes" ${VERSION_BUILD_SQL} ${STAGING_HOST}:${DEPLOY_DIR}/dbexec/update.sql'
+
+    #以下这段命令是在远程主机下执行
+    - ssh root@${STAGING_HOST} <<EOF
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - bash $DEPLOY_DIR/install.sh install ${VERSION_BUILD_NUMBER} ;
+      bash $DEPLOY_DIR/install.sh cutover ${VERSION_BUILD_NUMBER} ;
+      bash $DEPLOY_DIR/install.sh stop_old_version ${VERSION_BUILD_NUMBER}
+    - EOF

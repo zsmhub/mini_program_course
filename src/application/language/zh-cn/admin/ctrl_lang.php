@@ -1,0 +1,23 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+$lang = array(
+	'ControllerNotExists' => '当前控制器不存在',
+	'Status_1' => '控制器当前状态已为开放状态',
+	'Status_0' => '控制器当前状态已为禁用状态',
+	'editOk' => '修改成功',
+	'addOk' => '添加成功',
+	'CtrlKeyIsInvalid' => '请输入正确的控制器标识',
+	'CtrlNameIsNull' => '请输入控制器中文描述',
+	'CtrlIsExists' => '当前控制器已存在',
+	'DirIsNull' => '请输入正确的控制器所属目录',
+	'CtrlFileReadFail' => '控制器文件读取失败',
+	'MethodIsExists' => '当前功能已经存在',
+	'MethodNotExists' => '当前功能函数不存在',
+	'MethodKeyIsInvalid' => '请输入正确的功能标识',
+	'MethodDescIsNull' => '请输入功能描述',
+	'SystemError' => '系统错误',
+	'DirIsInValid' => '目录不能存在特殊字符',
+	'DirIsExists' => '目录已经存在',
+	'doSuccess'=>'操作成功',
+	'DirIsNull' => '目录不能为空',
+	'DirIsNotExists' => '目录不存在',
+);

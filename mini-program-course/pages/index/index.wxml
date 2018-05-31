@@ -1,0 +1,15 @@
+<view class="container">
+  <view class="page-head">
+    <view class="page-head-title">简介</view>
+    <view class="page-head-line"></view>
+    <view class="page-head-desc">您正在使用学校公选课小助手，该小程序主要用途是为本校学生的公选课报名提供便利。</view>
+  </view>
+
+  <view class="page-body">
+    <view class="btn-area">
+      <button type="primary" bindtap="login_navigate">点 击 登 录</button>
+    </view>
+  </view>
+ 
+  <include src="../foot/foot.wxml" />
+</view>

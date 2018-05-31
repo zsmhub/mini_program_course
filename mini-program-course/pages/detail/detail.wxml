@@ -1,0 +1,68 @@
+<view class="container">
+  <view class="page-body">
+    <block wx:if="{{flag}}">
+      <view class="sm_weui_cells">
+        <view class="weui-cells__title sm_weui_cell_title">
+          <!-- <view class="flex-wrp flex-wrp-column">
+            <view class="flex-item flex-item-left">
+              <text class="sm_weui_cells_title_text">14{{course_detail.course_name}}</text>
+            </view>
+            <view class="flex-item info-desc">
+               <view class="flex-wrp">
+                <view class="flex-item flex-width">
+                  <text>{{course_detail.operate_time}}</text>
+                </view>
+                <view class="flex-item text-center flex-width">
+                  <text>已报名: {{course_detail.activity_num}}人<text class="sm-red">[限额: {{course_detail.limit_num}}]</text></text>
+                </view>
+                <view class="flex-item text-right flex-width">
+                  <text>{{course_detail.status_trans}}</text>
+                </view>
+              </view> 
+            </view>
+          </view> -->
+          <view>
+            <text class="sm_weui_cells_title_text">{{course_detail.course_name}}</text>
+          </view>
+          <view class="info-desc">
+            <view class="flex-wrp">
+              <view class="flex-width1">
+                <text>{{course_detail.operate_time}}</text>
+              </view>
+              <view class="text-center flex-width2">
+                <text>已报名: {{course_detail.activity_num}}人<text class="sm-red" wx:if="{{course_detail.limit_num!=0}}">[限额: {{course_detail.limit_num}}]</text></text>
+              </view>
+              <view class="text-right flex-width3">
+                <text>{{course_detail.status_trans}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <block wx:for="{{course_detail.list}}" wx:key="key" wx:for-index="key" wx:for-item="item">
+          <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell weui-cell_input">
+              <view class="weui-cell__hd">
+                <view class="weui-label">{{item[0]}}:</view>
+              </view>
+              <view class="weui-cell__bd">{{item[1]}}</view>
+            </view>
+          </view>
+        </block>
+
+        <view class="btn-area sm-btn-area">
+          <block wx:if="{{flag_apply}}">
+            <button type="primary" bindtap="apply">我要报名</button>
+          </block>
+          <block wx:else>
+            <button type="primary" disabled='true'>{{apply_text}}</button>
+          </block>
+
+          <text>该课程将于 <text class="sm-red">{{course_detail.close_time}}</text> 截止报名</text>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <include src="../foot/foot.wxml" />
+</view>

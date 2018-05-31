@@ -1,0 +1,27 @@
+{
+	"description": "项目配置文件。",
+	"setting": {
+		"urlCheck": false,
+		"es6": true,
+		"postcss": true,
+		"minified": true
+	},
+	"compileType": "weapp",
+	"libVersion": "1.6.0",
+	"appid": "appid",
+	"projectname": "%E5%B9%BF%E5%B7%9E%E5%9F%8E%E5%B8%82%E8%81%8C%E4%B8%9A%E5%AD%A6%E9%99%A2%E5%85%AC%E9%80%89%E8%AF%BE%E5%B0%8F%E5%8A%A9%E6%89%8B",
+	"condition": {
+		"weapp": {
+			"current": -1,
+			"list": []
+		},
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		}
+	}
+}

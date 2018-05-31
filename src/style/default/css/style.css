@@ -1,0 +1,432 @@
+/** reset **/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+}
+
+body {
+    background-color: #fff;
+    color: #646464;
+    font-size: 12px;
+    font-family: "Tahoma", "Verdana", "微软雅黑", "宋体";
+}
+
+ol, ul {
+    list-style: none;
+}
+
+blockquote, q {
+    quotes: none;
+}
+
+ins {
+    text-decoration: none;
+}
+
+del {
+    text-decoration: line-through;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+a {
+    color: #000;
+    text-decoration: none;
+}
+
+.clear {
+    clear: both;
+}
+
+#loading {
+    position: absolute;
+    z-index: 1000;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    text-align: center;
+}
+#loading h1 {
+    top: 48%;
+    position: relative;
+}
+#loading h1 font {
+    font-size: 40px;
+    color: #15428B;
+}
+
+/** 自定义按钮输入框样式 **/
+.sm-button {
+    height: 25px;
+    width: auto;
+    background-color: #428bca;
+    color: #fff;
+    -moz-user-select: none;
+    background-image: none;
+    border: 1px solid #357ebd;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 1.42857;
+    margin-bottom: 0;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    padding: 2px 8px;
+}
+.sm-button:hover, .sm-button:focus, .sm-button.focus, .sm-button:active, .sm-button.active {
+    background-color: #3071a9;
+    border-color: #285e8e;
+    color: #fff;
+}
+
+/** 自定义textarea输入框样式 **/
+textarea {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555;
+    line-height: 1.42857;
+    padding: 6px;
+    vertical-align: top;
+    font-size: 14px;
+    font-weight: normal;
+}
+textarea:focus {
+    border-color: #66afe9;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
+    outline: 0 none;
+}
+
+/** 自定义input输入框样式 **/
+.sm-textbox {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555;
+    height: 30px;
+    line-height: 1.42857;
+    padding: 6px;
+    width: 180px;
+    font-size: 14px;
+    font-weight: normal;
+}
+.sm-textbox:focus {
+    border-color: #66afe9;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
+    outline: 0 none;
+}
+
+/** 自定义选择框样式 **/
+.sm-select {
+    width: 180px;
+    height: 30px;
+    font-size: 14px;
+    text-align: left;
+    vertical-align: middle;
+    padding: 5px;
+    border: 1px solid #ccc;
+}
+
+/* datagrid搜索模块样式 */
+div.sm-layout-search {
+    height: 55px;
+    padding: 5px 10px;
+    border-bottom: 1px solid #95B8E7;
+    min-width: 1300px;
+    overflow-y: hidden;
+    overflow-x: auto;
+    font-size: 12px;
+}
+div.sm-layout-search table tr td {
+    padding-right: 10px;
+}
+div.sm-layout-search label {
+    font-size: 12px;
+}
+
+/* 导航菜单样式 */
+.accordion .accordion-header-selected {
+    background: #E0ECFF;
+}
+.left_menu ul {
+    list-style-type:none;
+    margin:0;
+    padding:5px 10px;
+}
+.left_menu ul li {
+    padding: 0;
+    border-bottom: #EAEFF4 1px solid;
+}
+.left_menu ul li a {
+    line-height:24px;
+    display: block;
+}
+.left_menu ul li div {
+    margin:2px 0;
+    padding-top:2px;
+}
+.left_menu ul li div:hover {
+    border:1px dashed #99BBE8;
+    background:#E0ECFF;
+    cursor:pointer;
+}
+.left_menu ul li div:hover a {
+    color:#416AA3;
+}
+.left_menu ul li.on div {
+    border:1px solid #99BBE8;
+    background:#E0ECFF;
+    cursor:default;
+}
+.left_menu ul li.on div a {
+    color:#416AA3;
+    font-weight:bold;
+}
+.icon{
+    width: 18px;
+    line-height: 18px;
+    display: inline-block;
+    background: url(../images/admin_dot.gif) no-repeat 10px;
+}
+
+.dlg_fitem {
+    padding-top: 20px;
+    padding-left: 50px;
+}
+.fitem {
+    margin-bottom: 20px;
+    font-size: 13px;
+}
+.fitem label {
+    display:inline-block;
+    width: 80px;
+    text-align: right;
+}
+.fitem-star {
+    color: red;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.fitem-star-before {
+    color: red;
+}
+.fitem-textbox {
+    margin-right: 10px;
+}
+
+.head-north {
+    overflow: hidden;
+    height: 69px;
+    background: rgb(255, 255, 255) url("../images/index_bg.jpg") repeat-x scroll 0 0;
+}
+.head-south {
+    height: 30px;
+    background: #D2E0F2;
+}
+.head-left {
+    background: url("../images/logo.png") no-repeat scroll left center rgba(0, 0, 0, 0);
+    float: left;
+    color: #416AA3;
+    font-size: 27px;
+    margin-left: 20px;
+    padding-left: 75px;
+    line-height: 70px;
+    background-size: 64px 64px;
+}
+.head-right {
+    float:right;
+    margin-right:20px;
+}
+.head-right .text {
+    float: left;
+    margin-top: 10px;
+    line-height: 25px;
+    text-align: center;
+    color: #416AA3;
+}
+.head-right .img {
+    float: right;
+    margin-left: 10px;
+}
+.head-right a{
+    color: #416AA3;
+    text-decoration: underline;
+}
+.head-right span, .head-right a {
+    font-size: 14px;
+}
+
+/* datagrid搜索模块样式 */
+div.sm-layout-search {
+    height: 55px;
+    overflow-y: hidden;
+    padding: 5px 10px;
+    border-bottom: 1px solid #95B8E7;
+    min-width: 1300px;
+    overflow-y: hidden;
+    overflow-x: auto;
+    font-size: 12px;
+}
+div.sm-layout-search table tr td {
+    padding-right: 10px;
+}
+div.sm-layout-search label {
+    font-size: 12px;
+}
+
+/** 模糊搜索input输入框样式 **/
+.search-input {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555;
+    height: 25px;
+    line-height: 1.42857;
+    padding: 2px 5px;
+    width: 100px;
+}
+.search-input:focus {
+    border-color: #66afe9;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
+    outline: 0 none;
+}
+.search-select {
+    width: auto;
+    text-align: center;
+    vertical-align: middle;
+    padding: 3px;
+}
+
+.sm_foot_button {
+    width:80px;
+    height: 35px;
+    font-size: 16px;
+}
+
+.sub-link {background: none repeat scroll 0 0 #FFFFFF;border: 1px solid #3A6EA5;margin-bottom: 6px;width:100%;}
+.sub-link h1 {color: #9CACAF;font-size: 14px;margin: 0;overflow: hidden; padding: 7px 0 7px 10px;}
+.sub-link h1 a:visited {color: #333333;}
+.sub-link h1 a:link {color: #333333;}
+.sub-link h1 a:hover {color: #EB8A3D;}
+.sub-link h1 .cur {font-weight:bold; color:#444444;}
+.sub-link h1 .action-span-right {float: right;padding-left: 10px;}
+
+.sub-link h1 .action-span-right a {background: none repeat scroll 0 0 #FFFFFF;border-color: #3A6EA5;border-style: solid;border-width: 1px 2px 2px 1px;color: #004499;margin: 0 5px;padding: 4px 7px;text-decoration: none;float:left;margin-left:10px;min-width:40px;font-size: 12px;font-weight: 400;text-align:center;}
+.sub-link h1 .action-span-right a:hover {background-color: #DDEEF2;border-color: #3A6EA5;border-style: solid;border-width: 1px 2px 2px 1px;color: #666666;text-decoration: none;}
+.sub-link h1 .action-span-left {float: left;margin-top: 2px;}
+
+.list-div {background: none repeat scroll 0 0 #ffffff;border: 1px solid #3A6EA5;width: 100%;margin: 0 0 5px;}
+.list-div-ad {border: 0 solid #3A6EA5;}
+.list-div table {width: 100%;}
+.list-div th {background: none repeat scroll 0 0 #EFEFEF;border-right: 1px solid #DBDBDB;border-bottom: 1px solid #DBDBDB;padding: 6px 4px;white-space: nowrap;}
+.list-div tr:hover , .list-div table tbody tr:hover{ background:#fbffe4}
+.list-div td {border-right: 1px solid #DBDBDB;border-bottom: 1px solid #DBDBDB;padding: 4px;white-space: nowrap;}
+.list-div td.warp {white-space: normal;word-break:break-all;word-warp: break-word;}
+.list-div td.first-cell {font-weight: bold;padding-left: 10px;}
+.list-div input {vertical-align: middle;}
+.list-div a:visited, .list-div a:link {color: #192E32;text-decoration: underline;}
+.list-div a:hover {color: #9D7250;}
+.list-div input, list-div img {vertical-align: middle;}
+.list-div .footer {background: none repeat scroll 0 0 #F4FAFB;text-align: right;}
+
+.msg {
+    text-align: center;
+    padding: 10px;
+}
+.msg p {
+    font-size: 14px;
+    color: #CC3300;
+}
+.msg p a {
+    color: #0000FF;
+    text-decoration: underline;
+}
+
+.footer {
+    height: 25px;
+    background-color: rgb(210, 224, 242);
+    text-align: center;
+    color: #15428B;
+    margin: 0px;
+    padding: 0px;
+    line-height: 23px;
+}
+
+/** easyui样式修改 **/
+.layout-split-west {
+    border-right: 5px solid #d2d9ec;
+}
+.easyui-linkbutton {
+    padding: 0 5px;
+}
+.l-btn-plain {
+    padding: 1px;
+}
+.easyui-linkbutton-dialog {
+    width: 90px;
+}
+.border_zero {
+    border: 0;
+}
+.sm _datetimebox {
+    width:310px;
+    height: 30px;
+}
+.sm-linkbutton {
+    margin: 3px 0;
+}
+
+/* 上传页面样式 */
+#excel_import {
+    border: 1px solid #3A6EA5;
+    width: 100%;
+}
+#excel_import table {
+    width: 100%;
+}
+#excel_import table tr {
+    line-height: 40px;
+}
+#excel_import table tr td {
+    border-right: 1px solid #DBDBDB;
+    border-bottom: 1px solid #DBDBDB;
+    padding: 4px;
+    white-space: nowrap;
+}
+.layout_south {
+    height: 28px;
+    padding: 6px 20px;
+}
+.layout_south div {
+    float: left;
+}
+.a_style {
+    color: #416AA3;
+    text-decoration: underline;
+}
+.sm-gray {
+    color: #969696;
+}
+.sm-red {
+    color: #CC0000;
+}

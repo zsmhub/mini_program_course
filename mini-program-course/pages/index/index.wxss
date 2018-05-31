@@ -1,0 +1,6 @@
+page {
+    background-color: #fff;
+}
+.btn-area {
+    margin-top:120rpx;
+}

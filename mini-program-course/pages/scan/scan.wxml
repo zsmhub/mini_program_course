@@ -1,0 +1,20 @@
+<view class="container">
+  <view class="page-head">
+    <view class="page-head-title">扫码签到</view>
+    <view class="page-head-line"></view>
+    <view class="page-head-desc">请扫描老师给予的二维码进行签到</view>
+  </view>
+
+  <view class="page-body">
+    <view class="btn-area">
+      <block wx:if="{{flag_teacher}}">
+        <button type="primary" bindtap="scan" disabled='true'>扫 一 扫</button>
+      </block>
+      <block wx:else>
+        <button type="primary" bindtap="scan">扫 一 扫</button>
+      </block>
+    </view>
+  </view>
+ 
+  <include src="../foot/foot.wxml" />
+</view>

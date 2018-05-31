@@ -1,0 +1,202 @@
+body, html {
+    height: 100%;
+    -webkit-tap-highlight-color: transparent;
+    font-size: 14px;
+    color: #333;
+}
+div {
+    word-break: break-all;
+    word-wrap: break-word;
+}
+.demos-title {
+    text-align: center;
+    font-size: 34px;
+    color: #3cc51f;
+    font-weight: 400;
+    margin: 0 15%;
+}
+.demos-sub-title {
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+}
+.demos-header {
+    padding: 35px 0;
+}
+.demos-content-padded {
+    padding: 15px;
+}
+.demos-second-title {
+    text-align: center;
+    font-size: 24px;
+    color: #3cc51f;
+    font-weight: 400;
+    margin: 0 15%;
+}
+.clear {
+    clear: both;
+}
+.sm_left {
+    float: left;
+}
+.sm_right {
+    float: right;
+}
+.sm-gray {
+    color: #969696;
+}
+.sm-red {
+    color: #CC0000;
+}
+.bd > .weui_cells {
+    margin-top: 0;
+}
+.weui_navbar + .weui_tab_bd, #weui_tab_bd_two {
+    padding-top: 45px;
+}
+.weui_tab_bd {
+    padding-bottom: 0;
+}
+.weui_cells {
+    font-size: 14px;
+}
+.sm_weui_cell_bd_title {
+    font-size: 15px;
+    color: #60b460;
+    font-weight: bold;
+}
+.sm_weui_cell_bd_bottom {
+    color: #60b460;
+    font-size: 14px;
+    margin-top: 8px;
+}
+.sm_weui_cell_left {
+    margin-right: 32px;
+}
+.sm_weui_cell_label {
+    width: 25px;
+    display: inline-block;
+}
+.weui_cell {
+    padding: 16px 15px 13px 15px;
+}
+.weui_cell:before {
+    border-top: 1px dashed #66CC33;
+}
+.weui_navbar_item {
+    background-color: #60b460;
+    color: #fff;
+    font-size: 20px;
+}
+.weui_navbar_item:active {
+    background-color: #60b460;
+}
+.weui_navbar_item.weui_bar_item_on {
+    background-color: #6cc46c;
+    color: #fff;
+}
+.weui_tab_img {
+    height: 30px;
+    vertical-align: top;
+    margin-right: 8px;
+}
+.sm_bg {
+    background-color: #e1f0d7;
+    color: #60b460;
+}
+.table_tr_name {
+    font-size: 15px;
+}
+.table_tr_img {
+    width: 30px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+.sm_weui_table {
+    width: 100%;
+}
+.sm_weui_img_small {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+    margin-bottom: 2px;
+}
+.sm_weui_cell_title {
+    border: 2px solid #60b460;
+    border-radius: 14px;
+    background-color: #fff;
+    padding: 5px;
+    font-size: 15px;
+    color: #60b460;
+}
+.sm_weui_btn_primary {
+    background-color: #61b560;
+}
+.weui_cells_access .weui_cell_ft:after {
+    border-color: #60b460;
+}
+ul.news-list {
+    margin:0;
+    padding:0;
+    list-style:none;
+}
+li.list-item {
+    margin:0;
+    padding:0;
+    height:30px;
+    position:relative;
+}
+li.list-item .item-image {
+    float:left;
+}
+li.list-item .item-info{
+    height:30px;
+    line-height:30px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    padding: 5px 0;
+}
+
+/*photoswipe*/
+.my-gallery {
+    width: 100%;
+    float: left;
+}
+.my-gallery img {
+    width: 100%;
+    height: auto;
+}
+.my-gallery figure {
+    float: left;
+    width: 95px;
+    height: 95px;
+    margin: 0 5px 5px 0;
+    overflow: hidden;
+    position: relative;
+}
+.my-gallery figure a {
+    display: block;
+    width: 94px;
+    height: 94px;
+    overflow: hidden;
+}
+.my-gallery figure img {
+    max-width: none;
+    width: 94px;
+    height: 94px;
+}
+.my-gallery figcaption {
+    display: none;
+}
+.my-gallery-first {
+    width: 300px;
+}
+
+/*iphone5小屏幕样式*/
+@media screen and (max-width:320px) {
+    .sm_font {
+        font-size: 12px;
+    }
+}

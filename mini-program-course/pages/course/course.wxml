@@ -1,0 +1,35 @@
+<view class="container">
+  <view class="page-body">
+    <block wx:if="{{course_list}}">
+      <block wx:for="{{course_list}}" wx:for-index="idx" wx:for-item="item" wx:key="*this">
+        <view class="weui-panel">
+          <navigator url="/pages/detail/detail?course_id={{item.id}}" hover-class="navigator-hover">
+            <view class="weui-panel__bd">
+              <view class="weui-media-box weui-media-box_text">
+                <view class="weui-media-box__title weui-media-box__title_in-text">{{item.course_name}}</view>
+                <view class="weui-media-box__desc">{{item.outline}}</view>
+                <view class="weui-media-box__info">
+                  <view class="weui-media-box__info__meta">{{item.activity_num}} 报名</view>
+                  <view class="weui-media-box__info__meta">{{item.score}} 学分</view>
+                  <view class="weui-media-box__info__meta weui-media-box__info__meta_extra">时间: {{item.course_time}}</view>
+                </view>
+              </view>
+            </view>
+          </navigator>
+        </view>
+      </block>
+    </block>
+    <block wx:elif="{{course_list === false}}">
+      <view class="weui-panel">
+        <view class="weui-panel__bd">
+          <view class="weui-media-box weui-media-box_text">
+            <view class="weui-media-box__title weui-media-box__title_in-text">暂未发布课程信息</view>
+            <view class="weui-media-box__desc">请稍后再查询</view>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <include src="../foot/foot.wxml" />
+</view>
